@@ -47,7 +47,6 @@ var partition = function(s) {
   }
 
   const dp = getDp(s);
-  console.log('dp', dp);
   let n = s.length;
   let ret = [];
   let ans = [];
