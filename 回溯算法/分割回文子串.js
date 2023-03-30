@@ -1,14 +1,3 @@
-// var partition = function(s) {
-//   const length = s.length;
-//   if (length === 1) {
-//       return [s.split('')];
-//   }
-
-//   if (length === 2) {
-//       return s[0] === s[1] ? [s.split(''), [s]] : [s.split('')]; 
-//   }
-// };
-
 var partition = function(s) {
   let result = [];
 
@@ -38,6 +27,3 @@ var partition = function(s) {
 
   return result;
 };
-
-
-console.log(partition('google'));
