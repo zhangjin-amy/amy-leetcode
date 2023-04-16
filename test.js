@@ -1,26 +1,21 @@
-var jump = function(nums) {
-  let farthest = nums[0];
-  const length = nums.length;
-  let count = nums.length === 1 ? 0 : 1;
-  let start = 0;
-  while(start < length) {
-      if (farthest >= length - 1) {
-        return count;
+var mergeAlternately = function(word1, word2) {
+  let result = '';
+  const word1Arr = word1.split('');
+  const word2Arr = word2.split('');
+  while(word1Arr.length || word2Arr.length) {
+      if (word1Arr.length && word2Arr.length) {
+          result += word1Arr.shift();
+          result += word2Arr.shift();
+      } else if (word1Arr.length) {
+          result += word1Arr.join('');
+          return result;
+      } else if (word2Arr.length) {
+          result += word2Arr.join('');
+          return result;
       }
-      let range = start + nums[start];
-      for (let second = start; second <= range; second++) {
-        // console.log(second, second + nums[second]);
-          if (nums[second] === 0) {
-              continue;
-          }
-          if (second + nums[second] > farthest) {
-              start = second;
-              farthest = second + nums[second];
-          }
-      }
-      count += 1;
   }
-  return count;
+  return result;
+
 };
 
-console.log(jump([2, 3, 1, 1, 4]));
+console.log(mergeAlternately('ab', 'defyy'));

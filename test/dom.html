@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="btn1">按钮1</button>
+
+  <script>
+    const btn1 = document.querySelector('#btn1');
+    // btn1.onclick = btn1Click;
+
+    // btn1.onclick = btn1ClickNew;
+
+    // function btn1Click() {
+    //   console.log(1);
+    // }
+
+    // function btn1ClickNew() {
+    //   console.log(2);
+    // }
+
+    
+    btn1.addEventListener('click', addClick1Sync, true)
+    btn1.addEventListener('click', addClick1, false)
+    function addClick1() {
+      console.log('addClick1');
+    }
+
+    function addClick1Sync() {
+      setTimeout(() => {
+        console.log('addClickAsync')
+      }, 1000)
+    }
+  </script>
+</body>
+</html>
