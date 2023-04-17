@@ -1,53 +1,60 @@
 /**
- * 实现简易Promise
- * 实现 resolve, reject, then功能，但不能实现异步
+ * 实现简易的Promise
+ * 第一步：实现then方法(不能解决异步问题)
  */
 
-const PENDING = 'pending';
-const FULFILLED = 'fulfilled';
-const REJECTED = 'rejected';
+const PENGDING = 'pengding',
+      FULFILLED = 'fulfilled',
+      REJECTED = 'rejected';
 
-class myPromise {
-
-  constructor(exector) {
-    this.status = PENDING;
+class MyPromise {
+  constructor(executor) {
+    this.state = PENGDING;
     this.value = null;
     this.reason = null;
-    exector(this.resolve, this.reject);
+    executor(this.resolve, this.reject);
   }
 
-  resolve = (res) => {
-    if (this.status === PENDING) {
-      this.status = FULFILLED;
-      this.value = res;
-    }
-    
-    
-  }
-
-  reject= (err) => {
-    if (this.status === PENDING) {
-      this.status = REJECTED;
-      this.reason = err;
+  resolve = (value) => {
+    if (this.state === PENGDING) {
+      this.state = FULFILLED;
+      this.value = value;
     }
   }
 
-  then = (resolveCallback, rejectCallback) => {
-    if (this.status === FULFILLED) {
-      resolveCallback(this.value);
+  reject = (reason) => {
+    if (this.state === PENGDING) {
+      this.state = REJECTED;
+      this.reason = reason;
+    }
+  }
+
+  then = (onFulfilled, onRejected) => {
+    if (this.state === FULFILLED) {
+      onFulfilled(this.value);
     }
 
-    if (this.status === REJECTED) {
-      resolveCallback(this.reason);
+    if (this.state === REJECTED) {
+      onRejected(this.reason);
     }
   }
 }
 
-const p1 = new myPromise((resolve, reject) => {
-  setTimeout(() => {
-    resolve(1);
-  }, 0)
-  // resolve(1);
-}).then(res => {
-  console.log('then', res);
+const p1 = new MyPromise(function(resolve, reject){
+  resolve('hello')
+})
+
+p1.then(res => {
+  console.log('success', res);
+})
+
+
+const p2 = new MyPromise(function(resolve, reject){
+  reject('err');
+})
+
+p2.then(res => {
+  console.log(res);
+}, (err) => {
+  console.log('error', err)
 })

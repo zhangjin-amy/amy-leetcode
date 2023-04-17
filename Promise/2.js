@@ -1,72 +1,85 @@
 /**
- * 实现简易Promise
- * 实现 resolve, reject, then功能，但不能实现异步
- * 
- * +🟢可以在Promise中异步使用resolve
+ * 实现简易的Promise
+ * 第二步：解决异步问题
  */
 
-const PENDING = 'pending';
-const FULFILLED = 'fulfilled';
-const REJECTED = 'rejected';
+const PENGDING = 'pengding',
+      FULFILLED = 'fulfilled',
+      REJECTED = 'rejected';
 
-class myPromise {
-
-  constructor(exector) {
-    this.status = PENDING;
+class MyPromise {
+  constructor(executor) {
+    this.state = PENGDING;
     this.value = null;
     this.reason = null;
+    // 状态转为成功的回调
     this.onFulfilledCallbacks = [];
+    // 状态转为失败的回调
     this.onRejectedCallbacks = [];
-    exector(this.resolve, this.reject);
+    executor(this.resolve, this.reject);
   }
 
-  resolve = (res) => {
-    if (this.status === PENDING) {
-      this.status = FULFILLED;
-      this.value = res;
-      this.onFulfilledCallbacks.length && this.onFulfilledCallbacks.forEach(callback => {
-        callback(this.value);
-      })
-    }
-    
-  }
-
-  reject= (err) => {
-    if (this.status === PENDING) {
-      this.status = REJECTED;
-      this.reason = err;
-      this.onRejectedCallbacks.length && this.onRejectedCallbacks.forEach(callback => {
-        callback(this.reason);
-      })
+  resolve = (value) => {
+    if (this.state === PENGDING) {
+      this.state = FULFILLED;
+      this.value = value;
+      if (this.onFulfilledCallbacks.length) {
+        this.onFulfilledCallbacks.forEach(callback => callback());
+      }
+      
     }
   }
 
-  then = (onResolve = value => value, onReject = err => { throw new Error(err)}) => {
-    if (this.status === FULFILLED) {
-      onResolve(this.value);
+  reject = (reason) => {
+    if (this.state === PENGDING) {
+      this.state = REJECTED;
+      this.reason = reason;
+      if (this.onRejectedCallbacks.length) {
+        this.onRejectedCallbacks.forEach(callback => callback())
+      }
+    }
+  }
+
+  /**
+   * 重点改造异步问题
+   * 创建成功回调队列和失败回调队列
+   * Promise的状态一旦改变，依次执行队列中的函数
+   */
+  then = (onFulfilled, onRejected) => {
+    // 判断onFulfilled, onRejected是否是函数
+    onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v;
+    onRejected = typeof onRejected === 'function' ? onRejected : err => { throw err };
+    // 异步，
+    if (this.state === PENGDING) {
+      this.onFulfilledCallbacks.push(() => {
+        onFulfilled(this.value)
+      });
+      this.onRejectedCallbacks.push(() => {
+        onRejected(this.reason)
+      });
     }
 
-    if (this.status === REJECTED) {
-      onReject(this.reason);
+    if (this.state === FULFILLED) {
+      onFulfilled(this.value);
     }
 
-    if (this.status === PENDING) {
-      this.onFulfilledCallbacks.push(onResolve);
-      this.onRejectedCallbacks.push(onReject);
+    if (this.state === REJECTED) {
+      onRejected(this.reason);
     }
   }
 }
 
-const p1 = new myPromise((resolve, reject) => {
+const p1 = new MyPromise(function(resolve, reject){
   setTimeout(() => {
-    resolve('setTimeout 1')
-  })
+    resolve('async hello');
+  }, 300)
 })
 
 p1.then(res => {
-  console.log('then', res);
+  console.log('success', res);
 })
 
 p1.then(res => {
-  console.log('then2', res);
+  console.log('success2', res);
 })
+

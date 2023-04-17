@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="debounce-btn">防抖1</button>
+  <script>
+    // 防抖
+    // 间隔时间内再次触发，重新开始计时
+    function show() {
+      console.log('debounce')
+    }
+
+    function debounce(fn, delay) {
+      let timer = null;
+      return function() {
+        if (timer) {
+          clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+          fn();
+        }, delay);
+      }
+    }
+
+    var debounceFn = debounce(show, 2000);
+    console.log('debounceFn', debounceFn);
+    const btn1 = document.querySelector('#debounce-btn');
+    btn1.addEventListener('click', debounceFn);
+
+
+    // 🟢套路
+    // 节流和防抖都是在最外层定义timer
+    // 节流是无timer则执行，记得将定时器清空；
+    // 防抖是有timer则先清空，然后设置定时器
+  </script>
+</body>
+</html>
