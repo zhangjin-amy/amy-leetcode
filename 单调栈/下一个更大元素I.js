@@ -5,8 +5,6 @@ var nextGreaterElement = function(nums1, nums2) {
         res2 = Array.from({ length: l2 }, () => -1),
         res1 = Array.from({ length: l1 });
 
-  console.log('---res2', res2);
-
   const stack = [nums2.at(-1)];
 
   for (let i = l2 - 2; i >=0; i--) {
@@ -20,8 +18,6 @@ var nextGreaterElement = function(nums1, nums2) {
 
       stack.push(nums2[i]);
   }
-
-  console.log('res2', res2);
 
   // 遍历nums1
   for (let i = 0; i < nums1.length; i++) {
