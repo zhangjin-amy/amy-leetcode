@@ -1,0 +1,69 @@
+// var longestPalindrome = function(s) {
+//     const length = s.length;
+//     if (length === 1) {
+//         return s;
+//     }
+//     let ans = s[0];
+
+//     const dp = Array.from({ length }, () => Array.from({
+//         length
+//     }, () => false));
+
+//     console.log('dp', dp);
+//     // 初始化dp
+//     for(let i = 0; i < length; i++) {
+//         dp[i][i] = true;
+//     }
+
+//     for (let count = 2; count <= length; count++) {
+//       for (let i = 0; i <= length - count; i++) {
+//         const j = count + i - 1;
+
+//         if (j - i === 1) {
+//           dp[i][j] = s[i] === s[j];
+//         } else {
+//           dp[i][j] = s[i] === s[j] ? dp[i+1][j-1] : false;
+//         }
+//         if (dp[i][j] && j - i + 1 > ans.length) {
+//           ans = s.slice(i, j + 1);
+//         } 
+//       }
+//     }
+
+//     return ans;
+// };
+
+
+var longestPalindrome = function(s) {
+
+  const length = s.length;
+  if (length === 1) {
+    return s;
+  }
+
+  let ans = s[0];
+
+  for (let i = 0; i < length - 1; i++) {
+    help(i, i);
+    help(i, i + 1);
+  }
+
+  function help(midL, midR) {
+    if (midL === midR) {
+
+    }
+
+    while(s[midL] === s[midR] && midL >= 0 && midR <= length - 1) {
+      midL--;
+      midR++;
+    }
+
+    if (midR - midL - 1 > ans.length) {
+      ans = s.slice(midL + 1, midR);
+    }
+  }
+
+  return ans;
+}
+
+console.log(longestPalindrome('aaaa'))
